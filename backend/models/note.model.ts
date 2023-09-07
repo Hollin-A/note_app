@@ -1,13 +1,5 @@
-import { model, Schema, Model, Document } from "mongoose";
-
-export interface Note extends Document {
-  title: string;
-  content: string;
-  createDate: Date;
-  updatedDate: Date;
-  // createdBy: string;
-  timestamps?: {};
-}
+import { model, Schema, Model } from "mongoose";
+import { INote } from "../types/note";
 
 const NoteSchema: Schema = new Schema({
   title: { type: String, required: true },
@@ -18,4 +10,4 @@ const NoteSchema: Schema = new Schema({
   timestamps: { createDate: Date, updatedDate: Date },
 });
 
-export const NoteModel: Model<Note> = model<Note>("notes", NoteSchema);
+export const NoteModel: Model<INote> = model<INote>("notes", NoteSchema);

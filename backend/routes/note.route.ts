@@ -1,25 +1,22 @@
 import { Router, Request, Response } from "express";
+import {
+  getNotes,
+  getNote,
+  addNote,
+  updateNote,
+  deleteNote,
+} from "../controllers/note.controller";
 
-const router = Router();
+const router: Router = Router();
 
-router.post("/", (req: Request, res: Response) => {
-  res.status(201).json({ message: "Note added successfully" });
-});
+router.post("/", addNote);
 
-router.get("/", (req: Request, res: Response) => {
-  res.json({ message: "get notes" });
-});
+router.get("/", getNotes);
 
-router.get("/:id", (req: Request, res: Response) => {
-  res.json({ message: "get note" });
-});
+router.get("/:id", getNote);
 
-router.put("/:id", (req: Request, res: Response) => {
-  res.json({ message: "get note" });
-});
+router.patch("/:id", updateNote);
 
-router.delete("/:id", (req: Request, res: Response) => {
-  res.json({ message: "get note" });
-});
+router.delete("/:id", deleteNote);
 
 export default router;
