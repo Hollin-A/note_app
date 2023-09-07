@@ -1,9 +1,11 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express } from "express";
 import dotenv from "dotenv";
-import mongoose from "mongoose";
 import cors from "cors";
 
+import { dbConnect } from "./config/db.config";
+
 import noteRoutes from "./routes/note.route";
+import AuthRoutes from "./routes/auth.route";
 
 dotenv.config();
 
@@ -14,16 +16,10 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/api/v1/notes", noteRoutes);
+app.use("/api/v1/auth", AuthRoutes);
 
-const url: string = process.env.DB_URL as string;
+dbConnect();
 
-mongoose
-  .connect(url)
-  .then(() =>
-    app.listen(port, () =>
-      console.log(`Server running on http://localhost:${port}`)
-    )
-  )
-  .catch((error) => {
-    throw error;
-  });
+app.listen(port, () =>
+  console.log(`Server running on http://localhost:${port}`)
+);

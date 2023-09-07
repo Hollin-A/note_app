@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 import {
   getNotes,
   getNote,
@@ -6,8 +6,11 @@ import {
   updateNote,
   deleteNote,
 } from "../controllers/note.controller";
+import { authenticateJWT } from "../middleware/userAuth";
 
 const router: Router = Router();
+
+router.use(authenticateJWT);
 
 router.post("/", addNote);
 
