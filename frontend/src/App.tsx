@@ -3,6 +3,7 @@ import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import RootLayout from "./layouts/RootLayout";
+import Home from "./pages/Home";
 
 const router = createBrowserRouter([
   {
@@ -12,7 +13,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <div>Home</div>,
+        element: <Home />,
       },
       {
         path: "contacts",
@@ -23,12 +24,7 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return (
-    <RouterProvider
-      router={router}
-      // fallbackElement={<React.Fragment>Loading ...</React.Fragment>}
-    />
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

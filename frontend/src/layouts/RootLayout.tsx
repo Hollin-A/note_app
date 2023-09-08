@@ -1,12 +1,16 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 
-const RootLayout = () => {
+import Navbar from "../components/Navbar";
+
+type Props = {};
+
+const RootLayout = (props: Props) => {
   return (
-    <React.Fragment>
-      RootLayout
+    <div className="h-screen w-screen bg-light">
+      <Navbar />
       <Outlet />
-    </React.Fragment>
+    </div>
   );
 };
 
