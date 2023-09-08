@@ -59,7 +59,7 @@ const Navbar = () => {
       <IconButton size="large" edge="start">
         <MenuIcon />
       </IconButton>
-      <h1 className="text-xl font-black uppercase">note app</h1>
+      <h1 className="text-2xl font-black uppercase">notes app</h1>
       <FormGroup>
         <FormControlLabel
           control={<MaterialUISwitch sx={{ m: 1 }} defaultChecked />}

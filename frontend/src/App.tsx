@@ -4,8 +4,14 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import RootLayout from "./layouts/RootLayout";
 import Home from "./pages/Home";
+import Signin from "./pages/Signin";
 
 const router = createBrowserRouter([
+  {
+    path: "/sign-in",
+    element: <Signin />,
+    errorElement: <div>Error</div>,
+  },
   {
     path: "/",
     element: <RootLayout />,

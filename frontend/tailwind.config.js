@@ -12,7 +12,7 @@ module.exports = {
         light: "#F2F2F2",
         lightBeige: "#F2EBDC",
         beige: "#BFA08E",
-        red: "#8C0707",
+        red: "#7D0A0A",
       },
     },
   },

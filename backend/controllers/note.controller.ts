@@ -32,11 +32,8 @@ const addNote = async (req: Request, res: Response): Promise<void> => {
     });
 
     const newNote: INote = await note.save();
-    const allNotes: INote[] = await NoteModel.find();
 
-    res
-      .status(201)
-      .json({ message: "Note added", note: newNote, notes: allNotes });
+    res.status(201).json({ message: "Note added", note: newNote });
   } catch (error) {
     throw error;
   }
@@ -53,11 +50,9 @@ const updateNote = async (req: Request, res: Response): Promise<void> => {
       { _id: id },
       body
     );
-    const allNotes: INote[] = await NoteModel.find();
     res.status(200).json({
       message: "Note updated",
       note: updateNote,
-      notes: allNotes,
     });
   } catch (error) {
     throw error;
@@ -69,11 +64,9 @@ const deleteNote = async (req: Request, res: Response): Promise<void> => {
     const deletedNote: INote | null = await NoteModel.findByIdAndRemove(
       req.params.id
     );
-    const allNotes: INote[] = await NoteModel.find();
     res.status(200).json({
       message: "Note deleted",
       note: deletedNote,
-      notes: allNotes,
     });
   } catch (error) {
     throw error;
