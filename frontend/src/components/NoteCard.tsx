@@ -11,6 +11,7 @@ import MenuItem from "@mui/material/MenuItem";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 
 import DeleteNoteModal from "../modals/DeleteNoteModal";
+import EditNoteModal from "../modals/EditNoteModal";
 
 type Note = {
   _id: string;
@@ -33,12 +34,12 @@ const NoteCard = (props: NoteProps) => {
   const handleEditOpen = () => setEditOpen(true);
 
   const settings = [
-    { name: "Delete", onClickFunc: handleDeleteOpen },
     { name: "Edit", onClickFunc: handleEditOpen },
+    { name: "Delete", onClickFunc: handleDeleteOpen },
   ];
 
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null,
+    null
   );
 
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -113,6 +114,11 @@ const NoteCard = (props: NoteProps) => {
           note={props.note}
           open={deleteOpen}
           setOpen={setDeleteOpen}
+        />
+        <EditNoteModal
+          note={props.note}
+          open={editOpen}
+          setOpen={setEditOpen}
         />
       </Card>
     </Box>

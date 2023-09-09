@@ -11,16 +11,17 @@ import BASE_URL from "../config/apiConfig";
 
 import NoteCard from "../components/NoteCard";
 import AddNoteModal from "../modals/AddNoteModal";
+import { blueGrey } from "@mui/material/colors";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.80),
+  backgroundColor: alpha(theme.palette.common.white, 0.8),
   "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.90),
+    backgroundColor: alpha(theme.palette.common.white, 0.9),
   },
   marginLeft: 0,
-  width: "100%",
+  // width: "100%",
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(1),
     width: "auto",
@@ -45,6 +46,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
+    [theme.breakpoints.up("xs")]: {
+      width: "10ch",
+      "&:focus": {
+        width: "15ch",
+      },
+    },
     [theme.breakpoints.up("sm")]: {
       width: "20ch",
       "&:focus": {
@@ -98,7 +105,8 @@ const Home = () => {
         sx={{
           display: "flex",
           justifyContent: "space-between",
-          marginY: "20px",
+          paddingY: "20px",
+          backgroundColor: blueGrey[50],
         }}
       >
         <Search>
@@ -112,10 +120,13 @@ const Home = () => {
         </Search>
         <AddNoteModal />
       </Box>
-      <Masonry columns={4} spacing={2}>
-        {notes &&
-          notes.map((note: Note) => <NoteCard key={note._id} note={note} />)}
-      </Masonry>
+
+      <Box>
+        <Masonry columns={{ xs: 1, sm: 2, md: 3, lg: 4 }} spacing={2}>
+          {notes &&
+            notes.map((note: Note) => <NoteCard key={note._id} note={note} />)}
+        </Masonry>
+      </Box>
     </Container>
   );
 };

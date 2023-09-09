@@ -1,10 +1,18 @@
 import React from "react";
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { blueGrey } from "@mui/material/colors";
 
 import RootLayout from "./layouts/RootLayout";
 import Home from "./pages/Home";
 import Signin from "./pages/Signin";
+
+const theme = createTheme({
+  palette: {
+    primary: blueGrey,
+  },
+});
 
 const router = createBrowserRouter([
   {
@@ -30,7 +38,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <ThemeProvider theme={theme}>
+      <RouterProvider router={router} />;
+    </ThemeProvider>
+  );
 }
 
 export default App;

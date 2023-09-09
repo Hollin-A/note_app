@@ -53,7 +53,7 @@ const Fade = React.forwardRef<HTMLDivElement, FadeProps>(
         {React.cloneElement(children, { onClick })}
       </animated.div>
     );
-  },
+  }
 );
 
 const style = {
@@ -65,6 +65,7 @@ const style = {
   bgcolor: "background.paper",
   //   border: "2px solid #000",
   boxShadow: 24,
+  borderRadius: "10px",
   p: 4,
 };
 
@@ -128,11 +129,12 @@ const AddNoteModal = (props: Props) => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       addNote(values);
+      handleClose();
     },
   });
 
   return (
-    <div>
+    <>
       <Button
         onClick={handleOpen}
         variant="contained"
@@ -155,47 +157,49 @@ const AddNoteModal = (props: Props) => {
       >
         <Fade in={open}>
           <Box sx={style}>
-            <div>
-              <form onSubmit={formik.handleSubmit}>
-                <TextField
-                  fullWidth
-                  id="title"
-                  name="title"
-                  label="Note Title"
-                  value={formik.values.title}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={formik.touched.title && Boolean(formik.errors.title)}
-                  helperText={formik.touched.title && formik.errors.title}
-                />
-                <TextField
-                  fullWidth
-                  id="content"
-                  name="content"
-                  label="Note Content"
-                  type="content"
-                  value={formik.values.content}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={
-                    formik.touched.content && Boolean(formik.errors.content)
-                  }
-                  helperText={formik.touched.content && formik.errors.content}
-                />
-                <Button
-                  color="primary"
-                  variant="contained"
-                  fullWidth
-                  type="submit"
-                >
-                  Submit
-                </Button>
-              </form>
-            </div>
+            <form onSubmit={formik.handleSubmit}>
+              <TextField
+                fullWidth
+                id="title"
+                name="title"
+                label="Note Title"
+                variant="outlined"
+                value={formik.values.title}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.title && Boolean(formik.errors.title)}
+                helperText={formik.touched.title && formik.errors.title}
+                sx={{ mb: 2 }}
+              />
+              <TextField
+                fullWidth
+                id="content"
+                name="content"
+                label="Note Content"
+                type="content"
+                multiline
+                rows={4}
+                variant="outlined"
+                value={formik.values.content}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.content && Boolean(formik.errors.content)}
+                helperText={formik.touched.content && formik.errors.content}
+                sx={{ mb: 2 }}
+              />
+              <Button
+                color="primary"
+                variant="contained"
+                fullWidth
+                type="submit"
+              >
+                Add
+              </Button>
+            </form>
           </Box>
         </Fade>
       </Modal>
-    </div>
+    </>
   );
 };
 
