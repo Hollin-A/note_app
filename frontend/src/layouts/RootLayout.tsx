@@ -7,6 +7,8 @@ import KeyboardArrowUp from "@mui/icons-material/KeyboardArrowUp";
 
 import Navbar from "../components/Navbar";
 
+const navbarHeight: string = "68.5px";
+
 type Props = {};
 
 const RootLayout = (props: Props) => {
@@ -25,7 +27,13 @@ const RootLayout = (props: Props) => {
           <KeyboardArrowUp />
         </Fab>
       </Navbar>
-      <Outlet />
+      <div
+        style={{
+          height: `calc(100vh - ${navbarHeight})`,
+        }}
+      >
+        <Outlet />
+      </div>
     </Box>
   );
 };

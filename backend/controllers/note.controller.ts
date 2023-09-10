@@ -4,7 +4,7 @@ import { NoteModel } from "../models/note.model";
 
 const getNotes = async (req: Request, res: Response): Promise<void> => {
   try {
-    const notes: INote[] = await NoteModel.find();
+    const notes: INote[] = await NoteModel.find().sort({ updatedDate: -1 });
     res.status(200).json({ notes });
   } catch (error) {
     throw error;
@@ -46,9 +46,16 @@ const updateNote = async (req: Request, res: Response): Promise<void> => {
       body,
     } = req;
 
+    const updatedNote: INote = new NoteModel({
+      title: body.title,
+      content: body.content,
+      createDate: body.createDate,
+      updatedDate: new Date(),
+    });
+
     const updateNote: INote | null = await NoteModel.findByIdAndUpdate(
       { _id: id },
-      body,
+      updatedNote,
       { new: true }
     );
     res.status(200).json({

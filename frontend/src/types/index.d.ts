@@ -12,9 +12,16 @@ interface INoteState {
   error: string | undefined;
 }
 
-type NoteAction = {
-  type: string;
-  note: INote;
-};
+interface IUser {
+  _id: string;
+  username: string;
+  email: string;
+  password: string;
+}
 
-type DispatchType = (args: NoteAction) => NoteAction;
+interface IUserState {
+  loggedIn: boolean;
+  username: string | undefined;
+  jwt: string | undefined;
+  error: string | undefined;
+}

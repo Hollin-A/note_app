@@ -20,7 +20,10 @@ export const fetchNotes = createAsyncThunk("notes/fetchNotes", () => {
         Authorization: `Bearer ${token}`,
       },
     })
-    .then((data: AxiosResponse<{ notes: INote[] }>) => data.data.notes);
+    .then((data: AxiosResponse<{ notes: INote[] }>) => data.data.notes)
+    .catch((err) => {
+      throw err;
+    });
   return res;
 });
 
@@ -44,7 +47,7 @@ export const addNote = createAsyncThunk(
         return data.data.note;
       })
       .catch((err) => {
-        return err;
+        throw err;
       });
     return res;
   }
@@ -64,7 +67,7 @@ export const deleteNote = createAsyncThunk(
         return data.data.note;
       })
       .catch((err) => {
-        return err;
+        throw err;
       });
     return res;
   }
@@ -128,7 +131,6 @@ export const noteSlice = createSlice({
     );
     builder.addCase(addNote.rejected, (state, action) => {
       state.loading = false;
-      state.notes = [];
       state.error = action.error.message;
     });
     builder.addCase(deleteNote.pending, (state) => {
@@ -145,7 +147,6 @@ export const noteSlice = createSlice({
     );
     builder.addCase(deleteNote.rejected, (state, action) => {
       state.loading = false;
-      state.notes = [];
       state.error = action.error.message;
     });
     builder.addCase(editNote.pending, (state) => {
@@ -166,7 +167,6 @@ export const noteSlice = createSlice({
     );
     builder.addCase(editNote.rejected, (state, action) => {
       state.loading = false;
-      state.notes = [];
       state.error = action.error.message;
     });
   },

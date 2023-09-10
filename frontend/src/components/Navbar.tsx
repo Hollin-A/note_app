@@ -1,4 +1,7 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { userSelector } from "../features/user/userSlice";
+
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -50,27 +53,14 @@ function ScrollTop(props: Props) {
 }
 
 const Navbar = (props: Props) => {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
+  const [username, setUsername] = useState<string | undefined>(undefined);
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const userDetails = useAppSelector(userSelector);
 
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+  useEffect(() => {
+    setLoggedIn(userDetails.loggedIn);
+    setUsername(userDetails.username);
+  }, [userDetails]);
 
   return (
     <AppBar position="sticky">
@@ -94,20 +84,34 @@ const Navbar = (props: Props) => {
             NOTE APP
           </Typography>
 
-          <Box sx={{ flexGrow: 0, display: "flex" }}>
-            <IconButton
-              onClick={handleOpenUserMenu}
-              sx={{ p: 0, display: { xs: "none", sm: "flex" } }}
+          <Box
+            sx={{
+              flexGrow: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Typography
+              sx={{
+                display: { xs: "none", sm: "block" },
+                mr: 2,
+                fontWeight: 500,
+              }}
             >
-              <Avatar>
-                <PersonRoundedIcon />
-              </Avatar>
-            </IconButton>
+              {username && username}
+            </Typography>
             <Button
-              onClick={handleCloseNavMenu}
-              sx={{ my: 2, ml: 2, color: "white", display: "block" }}
+              sx={{
+                my: 2,
+                ml: 2,
+                color: "white",
+                display: "block",
+                border: "1px solid white",
+                px: 2,
+              }}
             >
-              log out
+              {loggedIn ? "log out" : "sign in"}
             </Button>
           </Box>
         </Toolbar>

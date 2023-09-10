@@ -7,7 +7,7 @@ import { blueGrey } from "@mui/material/colors";
 import RootLayout from "./layouts/RootLayout";
 import Home from "./pages/Home";
 import Signin from "./pages/Signin";
-import NotePage from "./features/notes/note";
+import Register from "./pages/Register";
 
 const theme = createTheme({
   palette: {
@@ -16,11 +16,6 @@ const theme = createTheme({
 });
 
 const router = createBrowserRouter([
-  {
-    path: "/sign-in",
-    element: <Signin />,
-    errorElement: <div>Error</div>,
-  },
   {
     path: "/",
     element: <RootLayout />,
@@ -31,8 +26,12 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "notes",
-        element: <NotePage />,
+        path: "/sign-in",
+        element: <Signin />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
       },
     ],
   },
@@ -41,7 +40,7 @@ const router = createBrowserRouter([
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <RouterProvider router={router} />;
+      <RouterProvider router={router} />
     </ThemeProvider>
   );
 }

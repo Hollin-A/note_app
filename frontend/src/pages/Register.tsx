@@ -3,7 +3,7 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import {
-  loginUser,
+  registerUser,
   clearError,
   userSelector,
 } from "../features/user/userSlice";
@@ -16,11 +16,26 @@ import TextField from "@mui/material/TextField";
 import { blueGrey, red } from "@mui/material/colors";
 
 const validationSchema = yup.object({
+  username: yup
+    .string()
+    .max(15, "Must be 15 characters or less")
+    .required("Required"),
   email: yup.string().email("Invalid email address").required("Required"),
-  password: yup.string().required("Required"),
+  password: yup
+    .string()
+    .min(8, "Your password is too short.")
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+      "Password must contain at least one uppercase letter, one lowercase letter, one numeral, and one symbol."
+    )
+    .required("Required"),
+  confirmPassword: yup
+    .string()
+    .required("Required")
+    .oneOf([yup.ref("password"), ""], "Passwords must match"),
 });
 
-const Signin = () => {
+const Register = () => {
   const [error, setError] = useState<string | undefined>(undefined);
   const userDetails = useAppSelector(userSelector);
 
@@ -33,22 +48,30 @@ const Signin = () => {
     dispatch(clearError());
   }, []);
 
-  function handleLogin(props: { email: string; password: string }) {
-    const loggingUser = {
+  function handleRegister(props: {
+    username: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+  }) {
+    const registeringUser = {
+      username: props.username,
       email: props.email,
       password: props.password,
     };
-    dispatch(loginUser(loggingUser));
+    dispatch(registerUser(registeringUser));
   }
 
   const formik = useFormik({
     initialValues: {
+      username: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      handleLogin(values);
+      handleRegister(values);
     },
   });
   return (
@@ -82,9 +105,22 @@ const Signin = () => {
             mb: 2,
           }}
         >
-          Login
+          Register
         </Typography>
         <form onSubmit={formik.handleSubmit}>
+          <TextField
+            fullWidth
+            id="username"
+            name="username"
+            label="User Name"
+            variant="standard"
+            value={formik.values.username}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={formik.touched.username && Boolean(formik.errors.username)}
+            helperText={formik.touched.username && formik.errors.username}
+            sx={{ mb: 2 }}
+          />
           <TextField
             fullWidth
             id="email"
@@ -110,19 +146,38 @@ const Signin = () => {
             onBlur={formik.handleBlur}
             error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password && formik.errors.password}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            fullWidth
+            id="confirmPassword"
+            name="confirmPassword"
+            label="Confirm Password"
+            type="password"
+            variant="standard"
+            value={formik.values.confirmPassword}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={
+              formik.touched.confirmPassword &&
+              Boolean(formik.errors.confirmPassword)
+            }
+            helperText={
+              formik.touched.confirmPassword && formik.errors.confirmPassword
+            }
             sx={{ mb: 4 }}
           />
           <Button color="primary" variant="contained" fullWidth type="submit">
-            Log in
+            Register
           </Button>
         </form>
         <Box sx={{ display: "flex", mt: 2 }}>
           <Typography sx={{ color: blueGrey[700] }}>
-            First time here ?{" "}
+            Already have an account ?{" "}
           </Typography>
-          <Link to="/register">
+          <Link to="/sign-in">
             <Typography sx={{ color: blueGrey[500], ml: 1 }}>
-              Register
+              Sign in
             </Typography>
           </Link>
         </Box>
@@ -146,4 +201,4 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default Register;
