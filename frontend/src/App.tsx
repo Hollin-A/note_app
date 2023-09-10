@@ -7,6 +7,7 @@ import { blueGrey } from "@mui/material/colors";
 import RootLayout from "./layouts/RootLayout";
 import Home from "./pages/Home";
 import Signin from "./pages/Signin";
+import NotePage from "./features/notes/note";
 
 const theme = createTheme({
   palette: {
@@ -30,8 +31,8 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "contacts",
-        element: <div>contacts</div>,
+        path: "notes",
+        element: <NotePage />,
       },
     ],
   },

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios, { AxiosResponse } from "axios";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { fetchNotes, noteSelector } from "../features/notes/noteSlice";
+
 import Masonry from "@mui/lab/Masonry";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import { styled, alpha } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
-
-import BASE_URL from "../config/apiConfig";
-
 import NoteCard from "../components/NoteCard";
 import AddNoteModal from "../modals/AddNoteModal";
 import { blueGrey } from "@mui/material/colors";
@@ -61,44 +61,25 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const token: string =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFyaXlhd2Fuc2Fob2xsaW5AZ21haWwuY29tIiwiaWF0IjoxNjk0MTkyNTY4LCJleHAiOjE2OTQyNzg5Njh9._tpvbzjVGxZP5JuiQeMFP139ZaaagIsVdQ8i84isDhM";
-
-type Note = {
-  _id: string;
-  title: string;
-  content: string;
-  createDate: string;
-  updatedDate: string;
-};
-
 const Home = () => {
-  const [notes, setNotes] = useState<Note[]>([]);
+  const [notes, setNotes] = useState<Array<INote>>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | undefined>(undefined);
+  const selectedNotes = useAppSelector(noteSelector);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    setLoading(selectedNotes.loading);
+    setError(selectedNotes.error);
+    setNotes(selectedNotes.notes);
+  }, [selectedNotes]);
 
   useEffect(() => {
-    const getNotes = async () => {
-      const axiosConfig = {
-        method: "get",
-        url: `${BASE_URL}/notes`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      axios(axiosConfig)
-        .then((response: AxiosResponse<{ notes: Note[] }>) => {
-          setNotes(response.data.notes);
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-        .finally(() => {
-          // setLoading(false);
-        });
-    };
-
-    getNotes();
+    dispatch(fetchNotes());
   }, []);
 
+  function handleFetchNotes() {
+    dispatch(fetchNotes());
+  }
   return (
     <Container maxWidth="xl">
       <Box
@@ -124,7 +105,7 @@ const Home = () => {
       <Box>
         <Masonry columns={{ xs: 1, sm: 2, md: 3, lg: 4 }} spacing={2}>
           {notes &&
-            notes.map((note: Note) => <NoteCard key={note._id} note={note} />)}
+            notes.map((note: INote) => <NoteCard key={note._id} note={note} />)}
         </Masonry>
       </Box>
     </Container>

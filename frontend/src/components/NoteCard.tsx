@@ -13,16 +13,8 @@ import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
 import DeleteNoteModal from "../modals/DeleteNoteModal";
 import EditNoteModal from "../modals/EditNoteModal";
 
-type Note = {
-  _id: string;
-  title: string;
-  content: string;
-  createDate: string;
-  updatedDate: string;
-};
-
 type NoteProps = {
-  note: Note;
+  note: INote;
 };
 
 const NoteCard = (props: NoteProps) => {

@@ -48,7 +48,8 @@ const updateNote = async (req: Request, res: Response): Promise<void> => {
 
     const updateNote: INote | null = await NoteModel.findByIdAndUpdate(
       { _id: id },
-      body
+      body,
+      { new: true }
     );
     res.status(200).json({
       message: "Note updated",

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios, { AxiosResponse } from "axios";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { useAppDispatch } from "../app/hooks";
+import { editNote } from "../features/notes/noteSlice";
+
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Backdrop from "@mui/material/Backdrop";
@@ -9,7 +12,6 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import { useSpring, animated } from "@react-spring/web";
-import AddRoundedIcon from "@mui/icons-material/AddRounded";
 
 import BASE_URL from "../config/apiConfig";
 
@@ -74,19 +76,8 @@ const validationSchema = yup.object({
   content: yup.string().required("Content is required"),
 });
 
-const token: string =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFyaXlhd2Fuc2Fob2xsaW5AZ21haWwuY29tIiwiaWF0IjoxNjk0MTkyNTY4LCJleHAiOjE2OTQyNzg5Njh9._tpvbzjVGxZP5JuiQeMFP139ZaaagIsVdQ8i84isDhM";
-
-type Note = {
-  _id: string;
-  title: string;
-  content: string;
-  createDate: string;
-  updatedDate: string;
-};
-
 type EditNoteModelProps = {
-  note: Note;
+  note: INote;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -96,34 +87,16 @@ const EditNoteModal = (props: EditNoteModelProps) => {
 
   const handleClose = () => setOpen(false);
 
-  type EditNoteProps = {
-    title: string;
-    content: string;
-  };
+  const dispatch = useAppDispatch();
 
-  const editNote = async (props: EditNoteProps) => {
-    const axiosConfig = {
-      method: "patch",
-      url: `${BASE_URL}/notes/${note._id}`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      data: {
-        title: props.title,
-        content: props.content,
-      },
+  function handleEditNote(props: { title: string; content: string }) {
+    const edittedNote = {
+      _id: note._id,
+      title: props.title,
+      content: props.content,
     };
-    axios(axiosConfig)
-      .then((response: AxiosResponse<{ note: Note }>) => {
-        console.log(response);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        // setLoading(false);
-      });
-  };
+    dispatch(editNote(edittedNote));
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -132,7 +105,7 @@ const EditNoteModal = (props: EditNoteModelProps) => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      editNote(values);
+      handleEditNote(values);
       handleClose();
     },
   });

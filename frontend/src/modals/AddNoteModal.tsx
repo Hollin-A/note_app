@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios, { AxiosResponse } from "axios";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { useAppDispatch } from "../app/hooks";
+import { addNote } from "../features/notes/noteSlice";
+
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Backdrop from "@mui/material/Backdrop";
@@ -10,8 +13,6 @@ import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import { useSpring, animated } from "@react-spring/web";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
-
-import BASE_URL from "../config/apiConfig";
 
 interface FadeProps {
   children: React.ReactElement;
@@ -74,52 +75,22 @@ const validationSchema = yup.object({
   content: yup.string().required("Content is required"),
 });
 
-const token: string =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFyaXlhd2Fuc2Fob2xsaW5AZ21haWwuY29tIiwiaWF0IjoxNjk0MTkyNTY4LCJleHAiOjE2OTQyNzg5Njh9._tpvbzjVGxZP5JuiQeMFP139ZaaagIsVdQ8i84isDhM";
-
-type Note = {
-  _id: string;
-  title: string;
-  content: string;
-  createDate: string;
-  updatedDate: string;
-};
-
-type AddNoteProps = {
-  title: string;
-  content: string;
-};
-
-const addNote = async (props: AddNoteProps) => {
-  const axiosConfig = {
-    method: "post",
-    url: `${BASE_URL}/notes`,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    data: {
-      title: props.title,
-      content: props.content,
-    },
-  };
-  axios(axiosConfig)
-    .then((response: AxiosResponse<{ note: Note }>) => {
-      console.log(response);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() => {
-      // setLoading(false);
-    });
-};
-
 type Props = {};
 
 const AddNoteModal = (props: Props) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const dispatch = useAppDispatch();
+
+  function handleAddNote(props: { title: string; content: string }) {
+    const newNote = {
+      title: props.title,
+      content: props.content,
+    };
+    dispatch(addNote(newNote));
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -128,7 +99,7 @@ const AddNoteModal = (props: Props) => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      addNote(values);
+      handleAddNote(values);
       handleClose();
     },
   });

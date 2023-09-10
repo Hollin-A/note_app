@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios, { AxiosResponse } from "axios";
+import { useAppDispatch } from "../app/hooks";
+import { deleteNote } from "../features/notes/noteSlice";
+
 import Button from "@mui/material/Button";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
@@ -64,46 +66,24 @@ const style = {
   p: 4,
 };
 
-type Note = {
-  _id: string;
-  title: string;
-  content: string;
-  createDate: string;
-  updatedDate: string;
-};
-
 type DeleteNoteModelProps = {
-  note: Note;
+  note: INote;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
-
-const token: string =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFyaXlhd2Fuc2Fob2xsaW5AZ21haWwuY29tIiwiaWF0IjoxNjk0MTkyNTY4LCJleHAiOjE2OTQyNzg5Njh9._tpvbzjVGxZP5JuiQeMFP139ZaaagIsVdQ8i84isDhM";
 
 const DeleteNoteModal = (props: DeleteNoteModelProps) => {
   const { note, open, setOpen } = props;
   const handleClose = () => setOpen(false);
 
-  const deleteNote = async () => {
-    const axiosConfig = {
-      method: "delete",
-      url: `${BASE_URL}/notes/${note._id}`,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  const dispatch = useAppDispatch();
+
+  function handleDeleteNote() {
+    const noteID = {
+      _id: note._id,
     };
-    axios(axiosConfig)
-      .then((response: AxiosResponse<{ note: Note }>) => {
-        console.log(response);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        handleClose();
-      });
-  };
+    dispatch(deleteNote(noteID));
+  }
 
   return (
     <Modal
@@ -127,7 +107,7 @@ const DeleteNoteModal = (props: DeleteNoteModelProps) => {
           <Typography id="spring-modal-description" sx={{ mt: 2 }}>
             Are you sure, you want to delete {note.title} note ?
           </Typography>
-          <Button onClick={() => deleteNote()}>delete</Button>
+          <Button onClick={() => handleDeleteNote()}>delete</Button>
           <Button>cancel</Button>
         </Box>
       </Fade>

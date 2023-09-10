@@ -4,18 +4,11 @@ import * as Yup from "yup";
 
 import { TextInput } from "../components/FormikElements";
 
-import notesImage from "../assets/notes.png";
-
 const Signin = () => {
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-light">
       <div className="w-full max-w-xs">
         <div className="mb-3 flex w-full items-center justify-center rounded-lg bg-white p-5 gap-3">
-          <img
-            src={notesImage}
-            alt="notes image"
-            className="aspect-square h-10"
-          />
           <h1 className="mb-1 text-center text-4xl font-black uppercase text-dark">
             notes app
           </h1>
