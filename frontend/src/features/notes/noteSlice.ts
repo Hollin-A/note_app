@@ -1,11 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import axios, { AxiosResponse } from "axios";
+import { initialState as userInitialState } from "../user/userSlice";
 
 import BASE_URL from "../../config/apiConfig";
 
-const token: string =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFyaXlhd2Fuc2Fob2xsaW5AZ21haWwuY29tIiwiaWF0IjoxNjk0Mjg4NjM0LCJleHAiOjE2OTQzNzUwMzR9.7PtIfGl6NV9I69pj2hZfdCPKcuRHO6C6RKT83DsyjMI";
+const jwt: string | undefined = userInitialState.jwt;
+
+console.log(jwt);
 
 const initialState: INoteState = {
   loading: false,
@@ -17,7 +19,7 @@ export const fetchNotes = createAsyncThunk("notes/fetchNotes", () => {
   const res = axios
     .get(`${BASE_URL}/notes`, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${jwt}`,
       },
     })
     .then((data: AxiosResponse<{ notes: INote[] }>) => data.data.notes)
@@ -39,7 +41,7 @@ export const addNote = createAsyncThunk(
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${jwt}`,
           },
         }
       )
@@ -60,7 +62,7 @@ export const deleteNote = createAsyncThunk(
     const res = axios
       .delete(`${BASE_URL}/notes/${_id}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${jwt}`,
         },
       })
       .then((data: AxiosResponse<{ note: INote }>) => {
@@ -86,7 +88,7 @@ export const editNote = createAsyncThunk(
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${jwt}`,
           },
         }
       )

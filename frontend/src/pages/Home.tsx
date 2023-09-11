@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios, { AxiosResponse } from "axios";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { fetchNotes, noteSelector } from "../features/notes/noteSlice";
 

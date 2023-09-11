@@ -101,18 +101,33 @@ const Navbar = (props: Props) => {
             >
               {username && username}
             </Typography>
-            <Button
-              sx={{
-                my: 2,
-                ml: 2,
-                color: "white",
-                display: "block",
-                border: "1px solid white",
-                px: 2,
-              }}
-            >
-              {loggedIn ? "log out" : "sign in"}
-            </Button>
+            {loggedIn ? (
+              <Button
+                sx={{
+                  my: 2,
+                  ml: 2,
+                  color: "white",
+                  display: "block",
+                  border: "1px solid white",
+                  px: 2,
+                }}
+              >
+                log out
+              </Button>
+            ) : (
+              <Button
+                sx={{
+                  my: 2,
+                  ml: 2,
+                  color: "white",
+                  display: "block",
+                  border: "1px solid white",
+                  px: 2,
+                }}
+              >
+                sign in
+              </Button>
+            )}
           </Box>
         </Toolbar>
       </Container>
