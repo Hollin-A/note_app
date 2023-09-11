@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { fetchNotes, noteSelector } from "../features/notes/noteSlice";
+import { userSelector } from "../features/user/userSlice";
 
 import Masonry from "@mui/lab/Masonry";
 import Container from "@mui/material/Container";
@@ -10,7 +11,6 @@ import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import NoteCard from "../components/NoteCard";
 import AddNoteModal from "../modals/AddNoteModal";
-import { blueGrey } from "@mui/material/colors";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -22,7 +22,6 @@ const Search = styled("div")(({ theme }) => ({
   marginLeft: 0,
   // width: "100%",
   [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(1),
     width: "auto",
   },
 }));
@@ -61,6 +60,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const Home = () => {
+  const [jwt, setJwt] = useState<string | undefined>(undefined);
+  const selectedUsers = useAppSelector(userSelector);
+
+  useEffect(() => {
+    setJwt(selectedUsers.jwt);
+  }, [selectedUsers]);
+
   const [notes, setNotes] = useState<Array<INote>>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>(undefined);
@@ -73,11 +79,11 @@ const Home = () => {
   }, [selectedNotes]);
 
   useEffect(() => {
-    dispatch(fetchNotes());
-  }, []);
+    dispatch(fetchNotes({ jwt }));
+  }, [jwt]);
 
   function handleFetchNotes() {
-    dispatch(fetchNotes());
+    dispatch(fetchNotes({ jwt }));
   }
   return (
     <Container maxWidth="xl">

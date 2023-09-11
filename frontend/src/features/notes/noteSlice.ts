@@ -5,9 +5,9 @@ import { initialState as userInitialState } from "../user/userSlice";
 
 import BASE_URL from "../../config/apiConfig";
 
-const jwt: string | undefined = userInitialState.jwt;
+// const jwt: string | undefined = userInitialState.jwt;
 
-console.log(jwt);
+// console.log(jwt);
 
 const initialState: INoteState = {
   loading: false,
@@ -15,23 +15,26 @@ const initialState: INoteState = {
   error: undefined,
 };
 
-export const fetchNotes = createAsyncThunk("notes/fetchNotes", () => {
-  const res = axios
-    .get(`${BASE_URL}/notes`, {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-    })
-    .then((data: AxiosResponse<{ notes: INote[] }>) => data.data.notes)
-    .catch((err) => {
-      throw err;
-    });
-  return res;
-});
+export const fetchNotes = createAsyncThunk(
+  "notes/fetchNotes",
+  (props: { jwt: string | undefined }) => {
+    const res = axios
+      .get(`${BASE_URL}/notes`, {
+        headers: {
+          Authorization: `Bearer ${props.jwt}`,
+        },
+      })
+      .then((data: AxiosResponse<{ notes: INote[] }>) => data.data.notes)
+      .catch((err) => {
+        throw err;
+      });
+    return res;
+  }
+);
 
 export const addNote = createAsyncThunk(
   "notes/addNote",
-  (props: { title: string; content: string }) => {
+  (props: { title: string; content: string; jwt: string | undefined }) => {
     const res = axios
       .post(
         `${BASE_URL}/notes`,
@@ -41,7 +44,7 @@ export const addNote = createAsyncThunk(
         },
         {
           headers: {
-            Authorization: `Bearer ${jwt}`,
+            Authorization: `Bearer ${props.jwt}`,
           },
         }
       )
@@ -57,12 +60,11 @@ export const addNote = createAsyncThunk(
 
 export const deleteNote = createAsyncThunk(
   "notes/deleteNote",
-  (props: { _id: string }) => {
-    const { _id } = props;
+  (props: { _id: string; jwt: string | undefined }) => {
     const res = axios
-      .delete(`${BASE_URL}/notes/${_id}`, {
+      .delete(`${BASE_URL}/notes/${props._id}`, {
         headers: {
-          Authorization: `Bearer ${jwt}`,
+          Authorization: `Bearer ${props.jwt}`,
         },
       })
       .then((data: AxiosResponse<{ note: INote }>) => {
@@ -77,8 +79,13 @@ export const deleteNote = createAsyncThunk(
 
 export const editNote = createAsyncThunk(
   "notes/editNote",
-  (props: { _id: string; title: string; content: string }) => {
-    const { _id, title, content } = props;
+  (props: {
+    _id: string;
+    title: string;
+    content: string;
+    jwt: string | undefined;
+  }) => {
+    const { _id, title, content, jwt } = props;
     const res = axios
       .patch(
         `${BASE_URL}/notes/${_id}`,

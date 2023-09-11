@@ -55,6 +55,8 @@ export const registerUser = createAsyncThunk(
 
 export const clearError = createAction("user/clearError");
 
+export const logout = createAction("user/logout");
+
 export const userSlice = createSlice({
   name: "user",
   initialState,
@@ -92,6 +94,11 @@ export const userSlice = createSlice({
   reducers: {
     clearError: (state) => {
       state.error = undefined;
+    },
+    logout: (state) => {
+      state.loggedIn = false;
+      state.username = undefined;
+      state.jwt = undefined;
     },
   },
 });

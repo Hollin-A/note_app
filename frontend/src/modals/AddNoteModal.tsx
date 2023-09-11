@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { useAppDispatch } from "../app/hooks";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { addNote } from "../features/notes/noteSlice";
+import { userSelector } from "../features/user/userSlice";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -74,10 +75,15 @@ const validationSchema = yup.object({
   content: yup.string().required("Content is required"),
 });
 
-type Props = {};
+const AddNoteModal = () => {
+  const [jwt, setJwt] = useState<string | undefined>(undefined);
+  const selectedUsers = useAppSelector(userSelector);
 
-const AddNoteModal = (props: Props) => {
-  const [open, setOpen] = React.useState(false);
+  useEffect(() => {
+    setJwt(selectedUsers.jwt);
+  }, [selectedUsers]);
+
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -87,6 +93,7 @@ const AddNoteModal = (props: Props) => {
     const newNote = {
       title: props.title,
       content: props.content,
+      jwt: jwt,
     };
     dispatch(addNote(newNote));
   }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useAppDispatch } from "../app/hooks";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { deleteNote } from "../features/notes/noteSlice";
+import { userSelector } from "../features/user/userSlice";
 
 import Button from "@mui/material/Button";
 import Backdrop from "@mui/material/Backdrop";
@@ -73,6 +74,13 @@ type DeleteNoteModelProps = {
 };
 
 const DeleteNoteModal = (props: DeleteNoteModelProps) => {
+  const [jwt, setJwt] = useState<string | undefined>(undefined);
+  const selectedUsers = useAppSelector(userSelector);
+
+  useEffect(() => {
+    setJwt(selectedUsers.jwt);
+  }, [selectedUsers]);
+
   const { note, open, setOpen } = props;
   const handleClose = () => setOpen(false);
 
@@ -81,6 +89,7 @@ const DeleteNoteModal = (props: DeleteNoteModelProps) => {
   function handleDeleteNote() {
     const noteID = {
       _id: note._id,
+      jwt: jwt,
     };
     dispatch(deleteNote(noteID));
   }

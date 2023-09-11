@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios, { AxiosResponse } from "axios";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { useAppDispatch } from "../app/hooks";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { editNote } from "../features/notes/noteSlice";
+import { userSelector } from "../features/user/userSlice";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -83,6 +84,13 @@ type EditNoteModelProps = {
 };
 
 const EditNoteModal = (props: EditNoteModelProps) => {
+  const [jwt, setJwt] = useState<string | undefined>(undefined);
+  const selectedUsers = useAppSelector(userSelector);
+
+  useEffect(() => {
+    setJwt(selectedUsers.jwt);
+  }, [selectedUsers]);
+
   const { note, open, setOpen } = props;
 
   const handleClose = () => setOpen(false);
@@ -94,6 +102,7 @@ const EditNoteModal = (props: EditNoteModelProps) => {
       _id: note._id,
       title: props.title,
       content: props.content,
+      jwt: jwt,
     };
     dispatch(editNote(edittedNote));
   }

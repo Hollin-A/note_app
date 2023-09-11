@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
-import { userSelector } from "../features/user/userSlice";
+import { userSelector, logout } from "../features/user/userSlice";
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -57,6 +57,8 @@ const Navbar = (props: Props) => {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const userDetails = useAppSelector(userSelector);
 
+  const dispatch = useAppDispatch();
+
   useEffect(() => {
     setLoggedIn(userDetails.loggedIn);
     setUsername(userDetails.username);
@@ -111,6 +113,7 @@ const Navbar = (props: Props) => {
                   border: "1px solid white",
                   px: 2,
                 }}
+                onClick={() => dispatch(logout())}
               >
                 log out
               </Button>
