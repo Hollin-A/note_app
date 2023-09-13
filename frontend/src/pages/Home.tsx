@@ -22,8 +22,8 @@ const Search = styled("div")(({ theme }) => ({
     backgroundColor: alpha(theme.palette.common.white, 0.9),
   },
   marginLeft: 0,
-  // width: "100%",
-  [theme.breakpoints.up("sm")]: {
+  width: "100%",
+  [theme.breakpoints.up("md")]: {
     width: "auto",
   },
 }));
@@ -122,7 +122,10 @@ const Home = () => {
       <Box
         sx={{
           display: "flex",
+          flexDirection: { xs: "column", md: "row" },
           justifyContent: "space-between",
+          alignItems: "stretch",
+          gap: 2,
           paddingY: "20px",
         }}
       >
@@ -138,22 +141,34 @@ const Home = () => {
             ) => setSearch(e.target.value)}
           />
         </Search>
-        <ToggleButtonGroup
-          color="primary"
-          value={categorySelect}
-          exclusive
-          onChange={handleCategorySelectChange}
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            justifyContent: { xs: "space-between", md: "right" },
+            gap: 2,
+          }}
         >
-          <ToggleButton value="all">all</ToggleButton>
-          <ToggleButton value="personal">personal</ToggleButton>
-          <ToggleButton value="work">work</ToggleButton>
-        </ToggleButtonGroup>
-        <AddNoteModal />
+          <ToggleButtonGroup
+            color="primary"
+            value={categorySelect}
+            exclusive
+            onChange={handleCategorySelectChange}
+          >
+            <ToggleButton value="all">all</ToggleButton>
+            <ToggleButton value="personal">personal</ToggleButton>
+            <ToggleButton value="work">work</ToggleButton>
+          </ToggleButtonGroup>
+          <AddNoteModal />
+        </Box>
       </Box>
 
       {!loading ? (
         <Box>
-          <Masonry columns={{ xs: 1, sm: 2, md: 3, lg: 4 }} spacing={2}>
+          <Masonry
+            columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}
+            spacing={{ xs: 0, sm: 2 }}
+          >
             {filtered}
           </Masonry>
         </Box>
