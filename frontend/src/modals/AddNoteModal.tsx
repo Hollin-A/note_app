@@ -13,6 +13,8 @@ import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import { useSpring, animated } from "@react-spring/web";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 interface FadeProps {
   children: React.ReactElement;
@@ -73,17 +75,23 @@ const style = {
 const validationSchema = yup.object({
   title: yup.string().required("Title is required"),
   content: yup.string().required("Content is required"),
+  // category: yup
+  //   .string()
+  //   .oneOf(categoryList, "Invalid Category")
+  //   .required("Required"),
 });
 
 const AddNoteModal = () => {
   const [jwt, setJwt] = useState<string | undefined>(undefined);
+  const [open, setOpen] = useState(false);
+  const [category, setCategory] = useState<string>("personal");
+
   const selectedUsers = useAppSelector(userSelector);
 
   useEffect(() => {
     setJwt(selectedUsers.jwt);
   }, [selectedUsers]);
 
-  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -93,15 +101,24 @@ const AddNoteModal = () => {
     const newNote = {
       title: props.title,
       content: props.content,
+      category: category,
       jwt: jwt,
     };
     dispatch(addNote(newNote));
   }
 
+  const handleChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newCategory: string
+  ) => {
+    setCategory(newCategory);
+  };
+
   const formik = useFormik({
     initialValues: {
       title: "",
       content: "",
+      // category: category,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -135,6 +152,17 @@ const AddNoteModal = () => {
         <Fade in={open}>
           <Box sx={style}>
             <form onSubmit={formik.handleSubmit}>
+              <ToggleButtonGroup
+                color="primary"
+                value={category}
+                exclusive
+                onChange={handleChange}
+                aria-label="Platform"
+                sx={{ mb: 2 }}
+              >
+                <ToggleButton value="personal">Personal</ToggleButton>
+                <ToggleButton value="work">Work</ToggleButton>
+              </ToggleButtonGroup>
               <TextField
                 fullWidth
                 id="title"
@@ -164,13 +192,14 @@ const AddNoteModal = () => {
                 helperText={formik.touched.content && formik.errors.content}
                 sx={{ mb: 2 }}
               />
+
               <Button
                 color="primary"
                 variant="contained"
                 fullWidth
                 type="submit"
               >
-                Add
+                Add Note
               </Button>
             </form>
           </Box>

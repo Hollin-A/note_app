@@ -5,10 +5,6 @@ import { initialState as userInitialState } from "../user/userSlice";
 
 import BASE_URL from "../../config/apiConfig";
 
-// const jwt: string | undefined = userInitialState.jwt;
-
-// console.log(jwt);
-
 const initialState: INoteState = {
   loading: false,
   notes: [],
@@ -34,13 +30,19 @@ export const fetchNotes = createAsyncThunk(
 
 export const addNote = createAsyncThunk(
   "notes/addNote",
-  (props: { title: string; content: string; jwt: string | undefined }) => {
+  (props: {
+    title: string;
+    content: string;
+    jwt: string | undefined;
+    category: string;
+  }) => {
     const res = axios
       .post(
         `${BASE_URL}/notes`,
         {
           title: props.title,
           content: props.content,
+          category: props.category,
         },
         {
           headers: {

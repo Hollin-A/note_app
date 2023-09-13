@@ -4,6 +4,7 @@ import { INote } from "../types/note";
 const NoteSchema: Schema = new Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
+  category: { type: String, required: true },
   createDate: { type: Date, default: Date.now },
   updatedDate: { type: Date, default: Date.now },
   createdBy: { type: String, required: true },

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks";
 import { fetchNotes, noteSelector } from "../features/notes/noteSlice";
 import { userSelector } from "../features/user/userSlice";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 import Masonry from "@mui/lab/Masonry";
 import Container from "@mui/material/Container";
@@ -39,8 +41,7 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
+    padding: theme.spacing(1.5, 1, 1, 0),
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
@@ -61,17 +62,21 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Home = () => {
   const [jwt, setJwt] = useState<string | undefined>(undefined);
+  const [notes, setNotes] = useState<Array<INote>>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | undefined>(undefined);
+  const [search, setSearch] = useState<string>("");
+  const [categorySelect, setCategorySelect] = useState<string>("all");
+
   const selectedUsers = useAppSelector(userSelector);
+  const selectedNotes = useAppSelector(noteSelector);
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setJwt(selectedUsers.jwt);
   }, [selectedUsers]);
 
-  const [notes, setNotes] = useState<Array<INote>>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | undefined>(undefined);
-  const selectedNotes = useAppSelector(noteSelector);
-  const dispatch = useAppDispatch();
   useEffect(() => {
     setLoading(selectedNotes.loading);
     setError(selectedNotes.error);
@@ -82,9 +87,36 @@ const Home = () => {
     dispatch(fetchNotes({ jwt }));
   }, [jwt]);
 
-  function handleFetchNotes() {
-    dispatch(fetchNotes({ jwt }));
-  }
+  const handleCategorySelectChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newCategorySelect: string
+  ) => {
+    setCategorySelect(newCategorySelect);
+  };
+
+  const categoryFilteredNotes =
+    notes &&
+    notes.filter((note) => {
+      if (categorySelect == "all") {
+        return notes;
+      } else if (categorySelect == "personal") {
+        return note.category.includes("personal");
+      } else if (categorySelect == "work") {
+        return note.category.includes("work");
+      }
+    });
+
+  const searchFilteredNotes = categoryFilteredNotes.filter((note) => {
+    return (
+      note.title.toLowerCase().includes(search.toLowerCase()) ||
+      note.content.toLowerCase().includes(search.toLowerCase())
+    );
+  });
+
+  const filtered: JSX.Element[] = searchFilteredNotes.map((note: INote) => (
+    <NoteCard key={note._id} note={note} />
+  ));
+
   return (
     <Container maxWidth="xl">
       <Box
@@ -101,18 +133,28 @@ const Home = () => {
           <StyledInputBase
             placeholder="Search…"
             inputProps={{ "aria-label": "search" }}
+            onChange={(
+              e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+            ) => setSearch(e.target.value)}
           />
         </Search>
+        <ToggleButtonGroup
+          color="primary"
+          value={categorySelect}
+          exclusive
+          onChange={handleCategorySelectChange}
+        >
+          <ToggleButton value="all">all</ToggleButton>
+          <ToggleButton value="personal">personal</ToggleButton>
+          <ToggleButton value="work">work</ToggleButton>
+        </ToggleButtonGroup>
         <AddNoteModal />
       </Box>
 
       {!loading ? (
         <Box>
           <Masonry columns={{ xs: 1, sm: 2, md: 3, lg: 4 }} spacing={2}>
-            {notes &&
-              notes.map((note: INote) => (
-                <NoteCard key={note._id} note={note} />
-              ))}
+            {filtered}
           </Masonry>
         </Box>
       ) : (

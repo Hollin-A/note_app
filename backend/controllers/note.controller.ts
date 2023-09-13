@@ -29,11 +29,12 @@ const addNote = async (req: Request, res: Response): Promise<void> => {
   const user = req.user as IUser;
 
   try {
-    const body = req.body as Pick<INote, "title" | "content">;
+    const body = req.body as Pick<INote, "title" | "content" | "category">;
 
     const note: INote = new NoteModel({
       title: body.title,
       content: body.content,
+      category: body.category,
       createdBy: user._id,
       createDate: new Date(),
       updatedDate: new Date(),

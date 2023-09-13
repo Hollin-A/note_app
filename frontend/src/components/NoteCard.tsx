@@ -9,6 +9,12 @@ import Menu from "@mui/material/Menu";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
+import Avatar from "@mui/material/Avatar";
+import CardHeader from "@mui/material/CardHeader";
+import { blueGrey } from "@mui/material/colors";
+import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
+import WorkRoundedIcon from "@mui/icons-material/WorkRounded";
+import QuestionMarkRoundedIcon from "@mui/icons-material/QuestionMarkRounded";
 
 import DeleteNoteModal from "../modals/DeleteNoteModal";
 import EditNoteModal from "../modals/EditNoteModal";
@@ -18,7 +24,7 @@ type NoteProps = {
 };
 
 const NoteCard = (props: NoteProps) => {
-  const { _id, title, content } = props.note;
+  const { _id, title, content, category } = props.note;
 
   const [deleteOpen, setDeleteOpen] = React.useState(false);
   const handleDeleteOpen = () => setDeleteOpen(true);
@@ -44,20 +50,22 @@ const NoteCard = (props: NoteProps) => {
 
   const card = (
     <React.Fragment>
-      <CardContent>
-        <Typography
-          variant="h5"
-          component="div"
-          sx={{
-            marginBottom: "5px",
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          {title}
+      <CardHeader
+        avatar={
+          <Avatar sx={{ bgcolor: blueGrey[500] }}>
+            {category === "personal" ? (
+              <PersonRoundedIcon />
+            ) : category === "work" ? (
+              <WorkRoundedIcon />
+            ) : (
+              <QuestionMarkRoundedIcon />
+            )}
+          </Avatar>
+        }
+        action={
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Options">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <IconButton onClick={handleOpenUserMenu}>
                 <MoreVertRoundedIcon />
               </IconButton>
             </Tooltip>
@@ -89,12 +97,11 @@ const NoteCard = (props: NoteProps) => {
               ))}
             </Menu>
           </Box>
-        </Typography>
-        <Divider />
-        <Typography
-          variant="body2"
-          sx={{ marginTop: "10px", wordBreak: "break-word" }}
-        >
+        }
+        title={title}
+      />
+      <CardContent>
+        <Typography variant="body2" sx={{ wordBreak: "break-word" }}>
           {content}
         </Typography>
       </CardContent>
