@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import axios, { AxiosResponse } from "axios";
-import { initialState as userInitialState } from "../user/userSlice";
 
 import BASE_URL from "../../config/apiConfig";
 

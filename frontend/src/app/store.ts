@@ -4,6 +4,7 @@ import { persistReducer, persistStore } from "redux-persist";
 
 import noteReducer from "../features/notes/noteSlice";
 import userReducer from "../features/user/userSlice";
+import themeReducer from "../features/theme/themeSlice";
 
 const persistConfig = {
   key: "root",
@@ -14,6 +15,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   userReducer,
   noteReducer,
+  themeReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

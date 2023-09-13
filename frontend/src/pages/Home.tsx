@@ -13,6 +13,7 @@ import InputBase from "@mui/material/InputBase";
 import SearchIcon from "@mui/icons-material/Search";
 import NoteCard from "../components/NoteCard";
 import AddNoteModal from "../modals/AddNoteModal";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -164,16 +165,15 @@ const Home = () => {
       </Box>
 
       {!loading ? (
-        <Box>
-          <Masonry
-            columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}
-            spacing={{ xs: 0, sm: 2 }}
-          >
+        <Box sx={{ marginRight: "-16px" }}>
+          <Masonry columns={{ xs: 1, sm: 2, md: 3, lg: 4 }} spacing={2}>
             {filtered}
           </Masonry>
         </Box>
       ) : (
-        "loading"
+        <Box sx={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}}>
+          <CircularProgress />
+        </Box>
       )}
     </Container>
   );

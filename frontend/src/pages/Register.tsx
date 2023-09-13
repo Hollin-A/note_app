@@ -7,13 +7,14 @@ import {
   clearError,
   userSelector,
 } from "../features/user/userSlice";
+import { themeSelector } from "../features/theme/themeSlice";
 import { Link } from "react-router-dom";
 
 import Container from "@mui/material/Container";
 import { Box, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { blueGrey, red } from "@mui/material/colors";
+import { blueGrey, red, grey } from "@mui/material/colors";
 
 const validationSchema = yup.object({
   username: yup
@@ -37,6 +38,14 @@ const validationSchema = yup.object({
 
 const Register = () => {
   const [error, setError] = useState<string | undefined>(undefined);
+  const [lightMode, setLightMode] = useState<boolean>(false);
+
+  const selectedTheme = useAppSelector(themeSelector);
+
+  useEffect(() => {
+    setLightMode(selectedTheme.lightTheme);
+  }, [selectedTheme]);
+
   const userDetails = useAppSelector(userSelector);
 
   const dispatch = useAppDispatch();
@@ -86,7 +95,7 @@ const Register = () => {
     >
       <Box
         sx={{
-          backgroundColor: "white",
+          backgroundColor: lightMode ? "white" : grey[900],
           paddingX: 3,
           borderRadius: "10px",
           width: "90%",

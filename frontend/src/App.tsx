@@ -3,26 +3,32 @@ import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { blueGrey } from "@mui/material/colors";
 
 import RootLayout from "./layouts/RootLayout";
 import Home from "./pages/Home";
 import Signin from "./pages/Signin";
 import Register from "./pages/Register";
 import ProtectedRoutes from "./components/ProtectedRoutes";
+import Error from "./pages/Error";
 
-const theme = createTheme({
-  palette: {
-    primary: blueGrey,
-  },
-});
+import { lightTheme, darkTheme } from "./theme/theme";
+import { themeSelector } from "./features/theme/themeSlice";
+import { useAppSelector } from "./app/hooks";
 
 function App() {
+  const [lightMode, setLightMode] = useState<boolean>(false);
+
+  const selectedTheme = useAppSelector(themeSelector);
+
+  useEffect(() => {
+    setLightMode(selectedTheme.lightTheme);
+  }, [selectedTheme]);
+
   const router = createBrowserRouter([
     {
       path: "/",
       element: <RootLayout />,
-      errorElement: <div>Error</div>,
+      errorElement: <Error />,
       children: [
         {
           path: "/",
@@ -45,7 +51,7 @@ function App() {
   ]);
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={lightMode ? lightTheme : darkTheme}>
       <RouterProvider router={router} />
     </ThemeProvider>
   );
