@@ -135,7 +135,7 @@ export const noteSlice = createSlice({
       addNote.fulfilled,
       (state, action: PayloadAction<INote>) => {
         state.loading = false;
-        state.notes = [...state.notes, action.payload];
+        state.notes = [action.payload, ...state.notes];
       }
     );
     builder.addCase(addNote.rejected, (state, action) => {
@@ -166,11 +166,13 @@ export const noteSlice = createSlice({
       (state, action: PayloadAction<INote>) => {
         state.loading = false;
 
-        const newState: INote[] = state.notes.map((existingNote) =>
-          existingNote._id === action.payload._id
-            ? action.payload
-            : existingNote
-        );
+        const newState: INote[] = state.notes
+          .map((existingNote) =>
+            existingNote._id === action.payload._id
+              ? action.payload
+              : existingNote
+          )
+          .sort((a, b) => (a.updatedDate > b.updatedDate ? -1 : 1));
         state.notes = newState;
       }
     );

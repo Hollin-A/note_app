@@ -106,12 +106,18 @@ const Home = () => {
         <AddNoteModal />
       </Box>
 
-      <Box>
-        <Masonry columns={{ xs: 1, sm: 2, md: 3, lg: 4 }} spacing={2}>
-          {notes &&
-            notes.map((note: INote) => <NoteCard key={note._id} note={note} />)}
-        </Masonry>
-      </Box>
+      {!loading ? (
+        <Box>
+          <Masonry columns={{ xs: 1, sm: 2, md: 3, lg: 4 }} spacing={2}>
+            {notes &&
+              notes.map((note: INote) => (
+                <NoteCard key={note._id} note={note} />
+              ))}
+          </Masonry>
+        </Box>
+      ) : (
+        "loading"
+      )}
     </Container>
   );
 };

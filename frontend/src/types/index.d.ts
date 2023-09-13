@@ -2,6 +2,7 @@ interface INote {
   _id: string;
   title: string;
   content: string;
+  createdBy: string;
   createDate: string;
   updatedDate: string;
 }

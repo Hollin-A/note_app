@@ -14,11 +14,6 @@ dotenv.config();
 const SECRET_KEY = process.env.SECRET_KEY as string;
 
 const registerUser = async (req: Request, res: Response): Promise<void> => {
-  // const hashedPassword = bcrypt.hashSync(
-  //   req.body.password,
-  //   bcrypt.genSaltSync(10)
-  // );
-
   await UserModel.create({
     userName: req.body.userName,
     email: req.body.email,

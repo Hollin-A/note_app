@@ -5,6 +5,6 @@ export interface INote extends Document {
   content: string;
   createDate: Date;
   updatedDate: Date;
-  // createdBy: string;
+  createdBy: string;
   timestamps?: {};
 }

@@ -67,6 +67,7 @@ export const userSlice = createSlice({
         state.loggedIn = true;
         state.jwt = action.payload.token;
         state.username = action.payload.username;
+        window.location.href = "/";
       }
     );
     builder.addCase(loginUser.rejected, (state, action) => {
@@ -83,6 +84,7 @@ export const userSlice = createSlice({
         state.loggedIn = true;
         state.jwt = action.payload.token;
         state.username = action.payload.username;
+        window.location.href = "/";
       }
     );
     builder.addCase(registerUser.rejected, (state, action) => {

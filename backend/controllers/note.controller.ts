@@ -1,10 +1,15 @@
 import { Response, Request } from "express";
 import { INote } from "../types/note";
 import { NoteModel } from "../models/note.model";
+import { IUser } from "../types/user";
 
 const getNotes = async (req: Request, res: Response): Promise<void> => {
+  const user = req.user as IUser;
+
   try {
-    const notes: INote[] = await NoteModel.find().sort({ updatedDate: -1 });
+    const notes: INote[] = await NoteModel.find({ createdBy: user._id }).sort({
+      updatedDate: -1,
+    });
     res.status(200).json({ notes });
   } catch (error) {
     throw error;
@@ -21,12 +26,15 @@ const getNote = async (req: Request, res: Response): Promise<void> => {
 };
 
 const addNote = async (req: Request, res: Response): Promise<void> => {
+  const user = req.user as IUser;
+
   try {
     const body = req.body as Pick<INote, "title" | "content">;
 
     const note: INote = new NoteModel({
       title: body.title,
       content: body.content,
+      createdBy: user._id,
       createDate: new Date(),
       updatedDate: new Date(),
     });
@@ -46,15 +54,15 @@ const updateNote = async (req: Request, res: Response): Promise<void> => {
       body,
     } = req;
 
-    const updatedNote: INote = new NoteModel({
+    const updatedNote = {
       title: body.title,
       content: body.content,
       createDate: body.createDate,
       updatedDate: new Date(),
-    });
+    };
 
     const updateNote: INote | null = await NoteModel.findByIdAndUpdate(
-      { _id: id },
+      id,
       updatedNote,
       { new: true }
     );

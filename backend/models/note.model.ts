@@ -6,7 +6,7 @@ const NoteSchema: Schema = new Schema({
   content: { type: String, required: true },
   createDate: { type: Date, default: Date.now },
   updatedDate: { type: Date, default: Date.now },
-  // createdBy: { type: String, required: false },
+  createdBy: { type: String, required: true },
   timestamps: { createDate: Date, updatedDate: Date },
 });
 

@@ -25,6 +25,7 @@ const Signin = () => {
   const userDetails = useAppSelector(userSelector);
 
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     setError(userDetails.error);
   }, [userDetails]);
@@ -39,6 +40,7 @@ const Signin = () => {
       password: props.password,
     };
     dispatch(loginUser(loggingUser));
+    
   }
 
   const formik = useFormik({

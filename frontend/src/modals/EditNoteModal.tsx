@@ -166,7 +166,7 @@ const EditNoteModal = (props: EditNoteModelProps) => {
               sx={{ mb: 2 }}
             />
             <Button color="primary" variant="contained" fullWidth type="submit">
-              Add
+              save changes
             </Button>
           </form>
         </Box>

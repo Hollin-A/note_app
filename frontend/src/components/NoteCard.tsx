@@ -91,7 +91,10 @@ const NoteCard = (props: NoteProps) => {
           </Box>
         </Typography>
         <Divider />
-        <Typography variant="body2" sx={{ marginTop: "10px" }}>
+        <Typography
+          variant="body2"
+          sx={{ marginTop: "10px", wordBreak: "break-word" }}
+        >
           {content}
         </Typography>
       </CardContent>
