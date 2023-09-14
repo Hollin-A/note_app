@@ -64,7 +64,8 @@ const style = {
   bgcolor: "background.paper",
   //   border: "2px solid #000",
   boxShadow: 24,
-  p: 4,
+  p: 2,
+  borderRadius: 2,
 };
 
 type DeleteNoteModelProps = {
@@ -110,14 +111,27 @@ const DeleteNoteModal = (props: DeleteNoteModelProps) => {
     >
       <Fade in={open}>
         <Box sx={style}>
-          <Typography id="spring-modal-title" variant="h6" component="h2">
+          <Typography
+            id="spring-modal-title"
+            variant="h6"
+            component="h2"
+            color="primary"
+          >
             Alert !
           </Typography>
-          <Typography id="spring-modal-description" sx={{ mt: 2 }}>
+          <Typography
+            id="spring-modal-description"
+            sx={{ my: 2 }}
+            color="primary"
+          >
             Are you sure, you want to delete {note.title} note ?
           </Typography>
-          <Button onClick={() => handleDeleteNote()}>delete</Button>
-          <Button>cancel</Button>
+          <Button onClick={() => handleDeleteNote()} variant="contained">
+            delete
+          </Button>
+          <Button onClick={handleClose} variant="contained" sx={{ ml: 2 }}>
+            cancel
+          </Button>
         </Box>
       </Fade>
     </Modal>
